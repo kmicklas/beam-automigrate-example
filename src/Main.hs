@@ -26,7 +26,7 @@ data ItemT f = Item
   { itemId :: Columnar f Int
   , itemName :: Columnar f Text
   -- Try uncommenting this line and rerunning:
-  -- , itemDescription :: Columnar f Text
+  -- , itemDescription :: Columnar f (Maybe Text)
   } deriving (Generic, Beamable)
 
 instance Table ItemT where
