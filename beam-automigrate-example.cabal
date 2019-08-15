@@ -9,7 +9,7 @@ cabal-version:       >=1.10
 
 executable beam-automigrate-example
   main-is:             Main.hs
-  build-depends:       base >=4.10 && <4.11
+  build-depends:       base
                      , beam-core
                      , beam-migrate
                      , beam-sqlite

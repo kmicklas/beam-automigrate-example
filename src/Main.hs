@@ -41,7 +41,7 @@ db :: DatabaseSettings be Db
 db = defaultDbSettings
 
 checkedSqliteDb :: CheckedDatabaseSettings Sqlite Db
-checkedSqliteDb = defaultMigratableDbSettings @SqliteCommandSyntax
+checkedSqliteDb = defaultMigratableDbSettings
 
 main :: IO ()
 main = do
