@@ -1,14 +1,11 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE TypeFamilies #-}
 module Main where
 
 import Data.Monoid
@@ -30,12 +27,14 @@ data ItemT f = Item
   } deriving (Generic, Beamable)
 
 instance Table ItemT where
-  data PrimaryKey ItemT f = ItemId (Columnar f Int) deriving (Generic, Beamable)
+  data PrimaryKey ItemT f = ItemId (Columnar f Int) deriving stock Generic deriving anyclass Beamable
   primaryKey = ItemId . itemId
 
-data Db f = Db
+newtype Db f = Db
   { dbItem :: f (TableEntity ItemT)
-  } deriving (Generic, Database be)
+  }
+  deriving stock Generic
+  deriving anyclass (Database be)
 
 db :: DatabaseSettings be Db
 db = defaultDbSettings
@@ -46,5 +45,5 @@ checkedSqliteDb = defaultMigratableDbSettings
 main :: IO ()
 main = do
   conn <- open "test.sqlite3"
-  runBeamSqlite conn $ do
+  runBeamSqlite conn $
     autoMigrate migrationBackend checkedSqliteDb
